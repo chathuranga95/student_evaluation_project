@@ -1,23 +1,20 @@
-<%@page import="javax.websocket.Session"%>
+<%@page import="java.util.List"%>
 <%@page import="java.io.IOException"%>
 <%@page import="java.lang.String"%>
 <%@page import="java.util.ArrayList"%>
 <%
     String occupation = "none";
     try {
-
         if (session.getAttribute("uname") == null) {
-            //response.sendRedirect("index.jsp");
+            response.sendRedirect("index.jsp");
         } else {
             occupation = (String) session.getAttribute("occupation");
             if (!occupation.equals("interviewer")) {
-                //response.sendRedirect("index.jsp");
+                response.sendRedirect("index.jsp");
             }
         }
     } catch (Exception e) {
     }
-
-
 %>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 
@@ -28,6 +25,7 @@
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="css/style_index.css">
+    <link rel="stylesheet" href="css/viewStudent.css">
     <link rel="stylesheet" href="css/w3.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
@@ -77,38 +75,33 @@
         </div>
 
         <!-- Page content -->
-        <div class="w3-content" style="max-width:2000px;margin-top:46px">
-            <div class ="login">
+        <div class="w3-content" style="max-width:2000px;margin-top:1px;margin-left: 100px">
+            
+            <div class ="column">
+                <style>p.indent{ padding-left: 1.8em }</style>>
                 <form method ="post" action="putMarks">
-                    <Text>Interviewer : <% out.println(session.getAttribute("uname")); %></Text>
-                    <br>
-                    <Text>School : <% out.println(session.getAttribute("school")); %></Text>
-                    <br>
-                    <Text>Input marks for Applicant :<% out.println(session.getAttribute("applicant")); %></Text>
-                    <br>
-                    <Text> School id : <% out.println(session.getAttribute("school_id")); %></Text>
-                    <br>
-                    <text>View Reference student's details</text>
+
                     <br><br>
+                    
+                    <h2>Referee Details</h2>
 
-
-                    <button type="button" class="btn btn-primary btn-block btn-large" value="view" onclick ="window.open('StudentDetailView')"> View Referees</button>
-
-
-
-                    <br>
-                    Questionare marks :<br>
-                    <input type="text" value ="0" name="mark1">
-                    <br>
-                    Other Marks :<br>
-                    <input type="text" value="0" name="mark2">
-                    <br>
-                    Marks for distance:
-                    <%Object dist_mark = session.getAttribute("dist_mark");%>
-                    <br>
-                    <input type="text" name="txtDistance" value="<%out.println(dist_mark);%>" disabled="disabled" />
-                    <br><br>
-                    <button type="submit" class="btn btn-primary btn-block btn-large">Submit</button>  
+                    <%List refDetails = (List) session.getAttribute("refDetails");
+                        String[] detailHead;
+                        detailHead = new String[]{"First Name :", "Last Name :", "Grade 5 :", "OL :", "AL :", "Other :"};
+                        int i = 0;
+                        for (Object ref : refDetails) {
+                            for (Object detail : (List) ref) {
+                                out.println(detailHead[i]);
+                                out.println(detail);
+                    %><br><br><%
+                                            i++;
+                                            if (i > 5) {
+                                                i = 0;
+                                            }
+                                        }
+                                    }%>
+                                    
+                                    
                 </form>     
             </div>
 
